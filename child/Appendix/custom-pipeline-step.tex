@@ -1,0 +1,381 @@
+\subsection[Overview]{Custom Pipeline Step Overview}\label{custom-pipeline-steps-overview}%%\label{how-to-add-custom-pipeline-steps}%
+The following basic steps should be taken to create a custom pipeline step:
+\begin{itemize}
+\item Copy an existing step as a template
+\item Update the new pipeline step name and add it to the entries in the \path{index.txt} and as a symlink in the parent level of the analysis directory
+\item Set the input directories ('inpdirs')
+\item Edit the 'run' file and add needed parameter files
+\item Add a script in the \path{code} directory containing the commands needed to run the programs used in the pipeline step
+\end{itemize}
+%
+\subsection[How To Add Steps]{How To Add Custom Pipeline Steps}\label{how-to-add-custom-pipeline-steps}%
+
+The steps needed to create a custom pipeline step are explained in detail here:
+\begin{enumerate}
+\item Within the \path{pipeline} directory, use a command such as \texttt{cp -r} to make a copy of an existing pipeline step as a template for the new one. 
+
+Example \path{pipeline} directory:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline$ ls -l
+total 818K
+drwxr-xr-x 25 at570 at570  834 Mar 18 17:14 .
+drwxr-xr-x  5 at570 at570  958 Mar 21 19:09 ..
+drwxr-xr-x  5 at570 at570  228 Mar 10 16:20 align
+drwxr-xr-x  5 at570 at570  234 Mar 21 19:18 annotations
+drwxr-xr-x  5 at570 at570  240 Mar 21 19:40 annotations-stats
+drwxr-xr-x  5 at570 at570  238 Mar 18 20:44 boundary-scores
+drwxr-xr-x  5 at570 at570  242 Mar 21 16:37 boundary-scores-pca
+lrwxrwxrwx  1 at570 at570    7 Mar 10 16:20 code -> ../code
+lrwxrwxrwx  1 at570 at570   12 Mar 10 16:20 code.main -> ../code.main
+drwxr-xr-x  5 at570 at570  241 Mar 21 16:37 compare-boundaries
+drwxr-xr-x  5 at570 at570  247 Mar 21 16:37 compare-boundaries-stats
+drwxr-xr-x  5 at570 at570  239 Mar 18 20:20 compare-matrices
+drwxr-xr-x  5 at570 at570  245 Mar 21 16:37 compare-matrices-stats
+drwxr-xr-x  4 at570 at570  245 Mar 21 16:37 diff-domains
+drwxr-xr-x  5 at570 at570  230 Mar 18 21:22 domains
+drwxr-xr-x  5 at570 at570  229 Mar 10 16:20 filter
+drwxr-xr-x  6 at570 at570  256 Mar 10 16:20 filter-stats
+drwxr-xr-x  7 at570 at570  323 Mar 21 16:41 hicplotter
+-rw-r--r--  1 at570 at570  331 Mar 10 16:20 index.txt
+lrwxrwxrwx  1 at570 at570    9 Mar 10 16:20 inputs -> ../inputs
+drwxr-xr-x  5 at570 at570  235 Mar 10 16:20 interactions
+drwxr-xr-x  4 at570 at570  187 Mar 21 16:37 matrix-estimated
+drwxr-xr-x  5 at570 at570  238 Mar 10 16:20 matrix-filtered
+drwxr-xr-x  5 at570 at570  260 Mar 10 16:20 matrix-hicnorm
+drwxr-xr-x  5 at570 at570  232 Mar 10 16:20 matrix-ic
+drwxr-xr-x  5 at570 at570  234 Mar 18 17:31 matrix-prep
+drwxr-xr-x  5 at570 at570  235 Mar 21 16:37 matrix-stats
+lrwxrwxrwx  1 at570 hpchic   8 Dec  3 14:56 psync -> ../psync
+drwxr-xr-x  4 at570 at570  158 Mar 10 16:20 template
+drwxr-xr-x  5 at570 at570  229 Mar 10 16:20 tracks
+\end{lstlisting}
+
+\item Adjust the name of the new directory to match the desired name of the new pipeline step. Add this name as an entry in the \path{index.txt} file, and make a symlink to this directory from the parent directory in the same style of the existing symlinks to other pipeline steps. The alpha-numeric prefix on the symlink will determine the order in which it will be executed. The command to do this might look like this:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench$ ln -s pipeline/my_new_step __03b-my_new_step
+\end{lstlisting}
+
+Example \path{index.txt} file contents:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline$ cat index.txt
+align
+
+filter
+filter-stats
+
+tracks
+
+matrix-filtered
+
+matrix-prep
+
+matrix-ic
+
+matrix-hicnorm
+
+#matrix-estimated
+#
+matrix-stats
+
+compare-matrices
+compare-matrices-stats
+
+boundary-scores
+boundary-scores-pca
+
+domains
+
+compare-boundaries
+compare-boundaries-stats
+
+#diff-domains
+#
+hicplotter
+
+interactions
+
+annotations
+annotations-stats
+\end{lstlisting}
+
+Example parent directory structure:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench$ ls -l
+lrwxrwxrwx  1 at570 at570  14 Mar 10 16:20 __01a-align -> pipeline/align
+lrwxrwxrwx  1 at570 at570  15 Mar 10 16:20 __02a-filter -> pipeline/filter
+lrwxrwxrwx  1 at570 at570  21 Mar 10 16:20 __02b-filter-stats -> pipeline/filter-stats
+lrwxrwxrwx  1 at570 at570  15 Mar 10 16:20 __03a-tracks -> pipeline/tracks
+lrwxrwxrwx  1 at570 at570  24 Mar 10 16:20 __04a-matrix-filtered -> pipeline/matrix-filtered
+lrwxrwxrwx  1 at570 at570  20 Mar 10 16:20 __05a-matrix-prep -> pipeline/matrix-prep
+lrwxrwxrwx  1 at570 at570  18 Mar 10 16:20 __06a-matrix-ic -> pipeline/matrix-ic
+lrwxrwxrwx  1 at570 at570  23 Mar 10 16:20 __07a-matrix-hicnorm -> pipeline/matrix-hicnorm
+lrwxrwxrwx  1 at570 at570  21 Mar 10 16:20 __08a-matrix-stats -> pipeline/matrix-stats
+lrwxrwxrwx  1 at570 at570  25 Mar 10 16:20 __09a-compare-matrices -> pipeline/compare-matrices
+lrwxrwxrwx  1 at570 at570  31 Mar 10 16:20 __09b-compare-matrices-stats -> pipeline/compare-matrices-stats
+lrwxrwxrwx  1 at570 at570  24 Mar 10 16:20 __10a-boundary-scores -> pipeline/boundary-scores
+lrwxrwxrwx  1 at570 at570  28 Mar 10 16:20 __10b-boundary-scores-pca -> pipeline/boundary-scores-pca
+lrwxrwxrwx  1 at570 at570  16 Mar 10 16:20 __11a-domains -> pipeline/domains
+lrwxrwxrwx  1 at570 at570  27 Mar 10 16:20 __12a-compare-boundaries -> pipeline/compare-boundaries
+lrwxrwxrwx  1 at570 at570  33 Mar 10 16:20 __12b-compare-boundaries-stats -> pipeline/compare-boundaries-stats
+lrwxrwxrwx  1 at570 at570  19 Mar 10 16:20 __13a-hicplotter -> pipeline/hicplotter
+lrwxrwxrwx  1 at570 at570  21 Mar 10 16:20 __14a-interactions -> pipeline/interactions
+lrwxrwxrwx  1 at570 at570  20 Mar 10 16:20 __15a-annotations -> pipeline/annotations
+lrwxrwxrwx  1 at570 at570  26 Mar 10 16:20 __15b-annotations-stats -> pipeline/annotations-stats
+lrwxrwxrwx  1 at570 at570  30 Mar 14 18:25 code -> code.repo/code.hicseq-standard
+lrwxrwxrwx  1 at570 at570  14 Mar 10 16:20 code.main -> code/code.main
+drwxr-xr-x 10 at570 at570 238 Mar 13 21:45 code.repo
+lrwxrwxrwx  1 at570 at570 104 Mar 14 18:25 data -> /ifs/home/at570/disk1/Resources/Code/pipeline-master/code/code.main/../../pipelines/hicseq-standard/data
+drwxr-xr-x  5 at570 at570 274 Mar 10 16:20 inputs
+drwxr-xr-x 25 at570 at570 834 Mar 18 17:14 pipeline
+-rwxr-xr-x  1 at570 at570 211 Mar 11 12:06 psync
+-rwxr-xr-x  1 at570 at570 888 Mar 10 16:20 run
+-rwxr-xr-x  1 at570 at570 898 Mar 10 16:20 run.dry
+\end{lstlisting}
+\item Edit the contents of the directory you have created to hold the information for your new pipeline step. 
+
+Example pipeline step directory:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l
+lrwxrwxrwx 1 at570 at570  15 Mar 10 16:20 clean.tcsh -> code/clean.tcsh
+lrwxrwxrwx 1 at570 at570   7 Mar 10 16:20 code -> ../code
+-rw-r--r-- 1 at570 at570   0 Mar 18 21:22 error.log
+drwxr-xr-x 2 at570 at570 155 Mar 10 16:20 inpdirs
+lrwxrwxrwx 1 at570 at570   9 Mar 10 16:20 inputs -> ../inputs
+drwxr-xr-x 3 at570 at570 146 Mar 10 16:20 params
+drwxr-xr-x 6 at570 at570 161 Mar 18 20:48 results
+lrwxrwxrwx 1 at570 at570  16 Mar 10 16:20 run -> run-domains.tcsh
+-rwxr-xr-x 1 at570 at570 959 Mar 11 14:58 run-domains.tcsh
+\end{lstlisting}
+First, edit the \path{run} file. A sample \path{run} file looks like this:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ cat run
+#!/bin/tcsh
+source ./code/code.main/custom-tcshrc      # customize shell environment
+
+##
+## USAGE: run-domains.tcsh [--dry-run]
+##
+
+# this section holds information that will be used in future updates of the software for reporting
+#% This step identifies topologically-associated domains (TADs) using different methods.
+#% TABLES:
+#% FIGURES:
+
+# process command-line inputs
+# check to make sure that the proper number of arguments have been passed to the script,
+# if not then print the script lines starting with '##' and exit
+if ($#argv > 1) then
+  grep '^##' $0 | scripts-send2err
+  exit
+endif
+
+set opt = "$1"
+
+# setup
+# set the 'operation' to be performed, aka name of the pipeline step
+set op = domains 
+# the directories to be used for inputs
+set inpdirs = "inpdirs/*" 
+# an expression which specifies which input branches to include
+set filter = "*.res_40kb"                  # work only with 40kb resolution 
+# the name of the results directory
+set results = results 
+
+# create the results directory
+scripts-create-path $results/ 
+# sends a message to the error logging script
+scripts-send2err "=== Operation = $op =============" 
+# 'resources' argument to be passed to qsub, referring to CPU cores and GB of RAM to be reserved for the job
+set resources = 1,20G 
+# command to be passed to the 'pipeline-master-explorer.r' script
+set cmd = "./code/code.main/scripts-qsub-wrapper $resources ./code/hicseq-$op.tcsh" 
+
+# generate run script
+# the 'pipeline-master-explorer.r' script parses the items set above to create a line of text containing the commands to be submitted to qsub
+Rscript ./code/code.main/pipeline-master-explorer.r -v -F "$filter" "$cmd" $results/$op "params/params.*.tcsh" "$inpdirs" "" "sample" 1
+
+# run and wait until done!
+# if the '--dry-run' argument was not passed to the script
+if ("$opt" != "--dry-run") scripts-submit-jobs ./$results/.db/run 
+\end{lstlisting}
+
+As listed in the above \path{run} file, the following 'setup' items need to be set for the custom pipeline step:
+\begin{itemize}
+% ~~~~~
+\item \begin{lstlisting}
+set op = <name_of_pipeline_step>
+\end{lstlisting}
+The 'operation' to be performed is set as 'op' and should be the name of the pipeline step, as listed in the directory name and in the \path{index.txt} file. 
+% ~~~~~
+\item \begin{lstlisting}
+set inpdirs = "inpdirs/*"
+\end{lstlisting}
+The 'inpdirs', or input directories, should be set as the file path to the directory containing symlinks to the input directories. In this case, the contents of \path{inpdirs} is as follows:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l inpdirs/
+lrwxrwxrwx 1 at570 at570 22 Mar 10 16:20 matrix-estimated -> ../../matrix-estimated
+lrwxrwxrwx 1 at570 at570 21 Mar 10 16:20 matrix-filtered -> ../../matrix-filtered
+lrwxrwxrwx 1 at570 at570 20 Mar 10 16:20 matrix-hicnorm -> ../../matrix-hicnorm
+lrwxrwxrwx 1 at570 at570 15 Mar 10 16:20 matrix-ic -> ../../matrix-ic
+lrwxrwxrwx 1 at570 at570 17 Mar 10 16:20 matrix-prep -> ../../matrix-prep
+\end{lstlisting}
+The setting "inpdirs/*" will cause all input directories to be used. The entries in the \path{inpdirs} directory should be set as needed for the execution of the custom pipeline step.
+% ~~~~~
+\item \begin{lstlisting}
+set filter = "*.res_40kb"
+\end{lstlisting}
+The 'filter' setting to be used when parsing the 'branches' of the input directory results, for inclusion in the execution of the pipeline step. In this example, only input branches that match the pattern \path{"*.res_40kb"} will be included. In this example, the following input branches are available:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l inpdirs/matrix-filtered/results/
+drwxr-xr-x 3 at570 at570 43 Mar 11 14:43 matrix-filtered.by_sample.res_1000kb
+drwxr-xr-x 3 at570 at570 43 Mar 11 14:44 matrix-filtered.by_sample.res_100kb
+drwxr-xr-x 3 at570 at570 43 Mar 11 14:44 matrix-filtered.by_sample.res_10kb.maxd_5Mb.rotate45
+drwxr-xr-x 3 at570 at570 43 Mar 11 14:45 matrix-filtered.by_sample.res_40kb
+\end{lstlisting}
+Based on the given 'filter' setting, only the following branch will be included:
+\begin{lstlisting}
+drwxr-xr-x 3 at570 at570 43 Mar 11 14:45 matrix-filtered.by_sample.res_40kb
+\end{lstlisting}
+This allows for the exclusion of unnecessary analysis branches. 
+% ~~~~~
+\item \begin{lstlisting}
+set resources = 1,20G 
+\end{lstlisting}
+This sets the number of computer resources to be reserved by \path{qsub}, listed as CPU cores and GB of RAM. If RAM is not a concern, only CPU cores need to be listed. A range of values can be used for CPU cores, such as \path{8-64}, though the utility of this depends on many factors related to your high-performance computing infrastructure and the specifics of the program being run; more cores may not necessarily speed up execution of the task at hand. 
+% ~~~~~
+\item \begin{lstlisting}
+set cmd = "./code/code.main/scripts-qsub-wrapper $resources ./code/hicseq-$op.tcsh" 
+\end{lstlisting}
+This line does not need to be modified by the user, but should be noted since it refers to the file in the \path{code} directory that will be created later and used to execute the program used in the pipeline step. Importantly, the entry \path{./code/hicseq-$op.tcsh} in this case refers to the file \path{./code/hicseq-domains.tcsh}. 
+% ~~~~~
+\item \begin{lstlisting}
+Rscript ./code/code.main/pipeline-master-explorer.r -v -F "$filter" "$cmd" $results/$op "params/params.*.tcsh" "$inpdirs" "" "sample" 1
+\end{lstlisting}
+Since this calls the settings that have already been made, this line of the 'run' file does not need to be edited unless the grouping and splitting variables need to be changed. In this case, the command uses the following arguments (as per Section~\ref{pipeline-master-explorer}):
+\begin{lstlisting}
+pipeline-master-explorer.r [OPTIONS] SCRIPT OUTDIR-PREFIX PARAM-SCRIPTS INPUT-BRANCHES SPLIT-VARIABLE OUTPUT-OBJECT-VARIABLE TUPLES
+\end{lstlisting}
+Importantly, the 'split-variable' and 'output-object-variable' come from the headings of columns used as grouping factors in the \path{inputs/sample-sheet.tsv} file for the analysis; custom grouping factors can be included in the sample sheet and used here. The output of the \path{pipeline-master-explorer.r} script is stored in the file \path{results/.db/run} which is created when the \path{run} file is executed (the command \path{./run --dry-run} can be used to generate this without running the commands). An example entry will look like this:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ head -n 1 results/.db/run
+./code/code.main/scripts-qsub-wrapper 1,20G ./code/hicseq-domains.tcsh results/domains.by_sample.armatus.gamma_0.5/matrix-prep.by_sample.scale/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1 params/params.armatus.gamma_0.5.tcsh inpdirs/matrix-prep/results/matrix-prep.by_sample.scale/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2 'CD34-HindIII-rep1'
+\end{lstlisting}
+During pipeline step execution, these lines will be submitted to \path{qsub} by the script \path{./code/code.main/scripts-qsub-wrapper}.
+
+\end{itemize}
+% ~~~~~
+\item Next, the parameter files must be set for the new pipeline step. These files are contained in the \path{params} directory:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l params/
+-rwxr-xr-x 1 at570 at570 131 Mar 10 16:20 params.armatus.gamma_0.5.tcsh
+-rwxr-xr-x 1 at570 at570 480 Mar 10 16:20 params.hicmatrix.tcsh
+-rwxr-xr-x 1 at570 at570 155 Mar 10 16:20 params.topdom.tcsh
+\end{lstlisting}
+Importantly, files must use the following naming scheme: \path{params.<name>.tcsh}. All files included in the \path{params} directory following this naming scheme will be evaluated as a separate 'branch' for analysis. An example parameters file looks like this:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ cat params/params.armatus.gamma_0.5.tcsh
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set tool = armatus
+set chrom_excluded = 'chr[MY]'
+set armatus_params = "-g 0.5"
+\end{lstlisting}
+Settings that are specific to each analysis branch should be included in these files. Sub-directories in the \path{results} directory will be created for each entry in the \path{params} directory, as can be seen here:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l results/
+drwxr-xr-x 7 at570 at570 246 Mar 18 20:48 domains.by_sample.armatus.gamma_0.5
+drwxr-xr-x 7 at570 at570 246 Mar 18 20:48 domains.by_sample.hicmatrix
+drwxr-xr-x 7 at570 at570 246 Mar 18 20:49 domains.by_sample.topdom
+\end{lstlisting}
+Note that in this case, the full output directory name comes from the following components: \path{<pipeline_step>.by_<output-object-variable>.<params_entry>}
+% ~~~~~
+\item A script containing the commands needed to run the desired program must be created and placed in the \path{code} directory, of which a partial list is shown below as an example:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ ls -l code/hic*
+-rwxr-xr-x 1 at570 at570  26528 Dec  8 11:42 code/hic-matrix.o
+-rwxr-xr-x 1 at570 at570 117660 Mar 18 15:25 code/hic-matrix.r
+-rwxr-xr-x 1 at570 at570  24440 Dec  8 11:42 code/hic-matrix.so
+-rwxr-xr-x 1 at570 at570   2471 Mar 10 16:20 code/hicnorm-cis.r
+-rwxr-xr-x 1 at570 at570   2542 Mar 10 16:20 code/hicseq-align.tcsh
+-rwxr-xr-x 1 at570 at570   2352 Mar 10 16:20 code/hicseq-annotate-tables.tcsh
+-rwxr-xr-x 1 at570 at570   3463 Mar 21 19:28 code/hicseq-annotations-enrichments.r
+-rwxr-xr-x 1 at570 at570   1547 Mar 21 18:54 code/hicseq-annotations-stats.tcsh
+-rwxr-xr-x 1 at570 at570   1274 Mar 10 16:20 code/hicseq-annotations.tcsh
+-rwxr-xr-x 1 at570 at570   2098 Mar 14 17:04 code/hicseq-boundary-scores-pca.tcsh
+-rwxr-xr-x 1 at570 at570   1649 Mar 10 16:20 code/hicseq-boundary-scores.tcsh
+-rwxr-xr-x 1 at570 at570   1440 Mar 10 16:20 code/hicseq-compare-boundaries-stats.tcsh
+-rwxr-xr-x 1 at570 at570   3138 Mar 10 16:20 code/hicseq-compare-boundaries.tcsh
+-rwxr-xr-x 1 at570 at570   1362 Mar 10 16:20 code/hicseq-compare-matrices-stats.tcsh
+-rwxr-xr-x 1 at570 at570   1596 Mar 10 16:20 code/hicseq-compare-matrices.tcsh
+-rwxr-xr-x 1 at570 at570   1902 Mar 10 16:20 code/hicseq-diff-domains.tcsh
+\end{lstlisting}
+Importantly, the primary script must follow this naming scheme: \path{hicseq-<pipeline_step>.tcsh}. In this example, this would correspond to \path{hicseq-domains.tcsh}. Pre-existing scripts can be used as a template to set up your custom script. This example script has the following contents:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ cat code/hicseq-domains.tcsh
+#!/bin/tcsh
+source ./code/code.main/custom-tcshrc     # shell settings
+
+##
+## USAGE: hicseq-domains.tcsh OUTPUT-DIR PARAM-SCRIPT BRANCH OBJECT(S)
+##
+
+if ($#argv != 4) then
+  grep '^##' $0
+  exit
+endif
+
+set outdir = $1
+set params = $2
+set branch = $3
+set objects = ($4)
+
+# read variables from input branch
+source ./code/code.main/scripts-read-job-vars $branch "$objects" "genome genome_dir bin_size"
+
+# run parameter script
+source $params
+
+# create path
+scripts-create-path $outdir/
+
+# -------------------------------------
+# -----  MAIN CODE BELOW --------------
+# -------------------------------------
+
+# Run domains
+if (($tool == armatus) || ($tool == di) || ($tool == topdom) || ($tool == caltads) || ($tool == hicmatrix)) then
+  ./code/hicseq-domains-$tool.tcsh $outdir $params $branch "$objects"
+else
+  scripts-send2err "Error: unknown domain caller tool $tool."
+  exit 1
+endif
+
+# -------------------------------------
+# -----  MAIN CODE ABOVE --------------
+# -------------------------------------
+
+# save variables
+source ./code/code.main/scripts-save-job-vars
+
+# done
+scripts-send2err "Done."
+\end{lstlisting}
+The preamble of the script should require little user intervention, while the bulk of the user's custom pipeline code should be inserted between the 'MAIN CODE' blocks specified within the document. For reference on how to structure your custom code, compare the 'USAGE' entry with the evaluated command to be passed to the script in the \path{results/.db/run} file. For convenience, the sample entry is repeated below:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/domains$ head -n 1 results/.db/run
+./code/code.main/scripts-qsub-wrapper 1,20G ./code/hicseq-domains.tcsh results/domains.by_sample.armatus.gamma_0.5/matrix-prep.by_sample.scale/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1 params/params.armatus.gamma_0.5.tcsh inpdirs/matrix-prep/results/matrix-prep.by_sample.scale/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2 'CD34-HindIII-rep1'
+\end{lstlisting}
+While this primary script should be in the .tcsh format, subsequent scripts in the user's preferred language can be called. They should follow the same naming conventions as shown in the \path{code} directory example above.
+% ~~~~~
+% \item \path{???}
+% \item Profit
+\end{enumerate}
+% \begin{lstlisting}
+% \end{lstlisting}
+%
+\clearpage

@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[sc]{mathpazo} % 
+\renewcommand{\familydefault}{\sfdefault} % sets the default font type to sans-serif
+\usepackage{helvet}  % sets the font to Helvetica, scaled 95%
+\usepackage[T1]{fontenc}
+\usepackage{geometry} 
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{3} % number for section levels, in text
+\setcounter{tocdepth}{2} % inclusion of section levels in ToC
+% %\usepackage{array,booktabs}
+\usepackage{cite} 
+\usepackage[labelfont=bf]{caption} 
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=trues]
+ {hyperref} % colorlinks=false
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+% %\hypersetup{pdfstartview={XYZ null null 1}} %this is knitr default
+\usepackage{breakurl}
+% \usepackage{etoolbox} 
+\usepackage{forloop}
+\usepackage{tikz} 
+% \usepackage{subcaption} 
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{xcolor,colortbl}
+% ~~~~~ for source code formatting
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\scriptsize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=bash,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+%%%%%%
+% for the footer
+% \usepackage{lastpage}
+% \usepackage{fancyhdr}
+% \pagestyle{fancy} 
+% \cfoot{\thepage\ of \pageref{LastPage}}
+\usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
+\usepackage{lastpage}% http://ctan.org/pkg/lastpage
+\pagestyle{fancy}% Set default page style to fancy
+\renewcommand{\headrulewidth}{0pt}% Remove header rule
+\fancyhead{}% Remove all header contents
+\cfoot{Page \thepage\ of \pageref{LastPage}}% Page X of Y in the footer (centered)
+%%%%%%%
+% \usepackage{tabularx}
+% \usepackage{tabulary}
+\usepackage[absolute]{textpos} % use this for the header text block
+%%%%%%
+\listfiles % list the packages and versions used in the .log file upon compilation
+%%%%
+\begin{document}% there are some commands in latex you can mess with; never mess with this one
+% Also, never mess with the following chunk unless you think you know what you're doing:
+<<setup, include=FALSE, cache=FALSE>>=
+# this is equivalent to \SweaveOpts{...}
+opts_chunk$set(fig.path='figure/latex-', fig.align='center', fig.show='hold')
+options(replace.assign=TRUE,width=90)
+require(highlight)
+@ 
+
+\title{HiC-Bench Manual}
+\author{Stephen M. Kelly\,$^{1,}$$^{2}$, Charalampos Lazaris\,$^{3,}$$^{4,}$$^{5}$, Aristotelis Tsirigos\,$^{1,}$$^{2,}$$^{3,}$$^{4,}$$^{5}$
+\\
+\footnotesize $^{1}$ Applied Bioinformatics Center, Office of Collaborative Science, NYU School of Medicine, NY 10016, USA\\
+\footnotesize $^{2}$ Genome Technology Center, Office of Collaborative Science, NYU School of Medicine, NY 10016, USA\\
+\footnotesize $^{3}$ Department of Pathology, NYU School of Medicine, New York, New York 10016, USA\\
+\footnotesize $^{4}$ NYU Cancer Institute and Helen L. and Martin S. Kimmel Center for Stem Cell Biology, NYU School of Medicine, New York, New York 10016, USA\\
+\footnotesize $^{5}$ Center for Health Informatics \& Bioinformatics, NYU School of Medicine, NY 10016, USA\\
+}
+
+\date{\today}
+
+\maketitle
+% header block with logo
+{\footnotesize
+\textblockorigin{-18pt}{-2pt}
+\begin{textblock*}{10cm}(2cm,1cm)
+\includegraphics[height=2.5cm,keepaspectratio]{figure/NYULMC_white.jpg}
+\end{textblock*}}
+% old logo in center of page
+% \begin{figure}[!h]
+%     \centering
+%     \includegraphics[height=2cm]{figure/NYULMC_white.jpg} % no image scaling
+%     % \caption{My caption}
+%     \label{fig:title-image}
+% \end{figure}
+
+
+{\footnotesize \tableofcontents \listoffigures}
+
+\section{Introduction} % basic description of the pipeline and its usage
+\input{child/Introduction/install-setup-run.tex}
+\input{child/Introduction/dependencies.tex}
+\clearpage
+
+\section{Default Pipeline Components} \label{default-pipeline} % description of pipeline components
+\input{child/default-pipeline-components.tex}
+\clearpage
+
+% come back to this section
+% \section{Pipeline Code Structure} \label{code-structure}
+% \input{child/code-structure.tex}
+% \clearpage
+
+% hold off on auto report
+% \section{Automatic Reports} \label{auto-report} % description of automatic reports and their components
+% \input{child/auto_report.tex}
+% \clearpage
+
+% move this to the intro
+% \section{Dependencies} \label{dependency}% description of dependencies needed
+% \clearpage
+
+% hold off on this section as well
+% \section{Modifying the Pipeline} \label{custom-pipeline-step} % requirements for modifying the pipeline
+% \input{child/custom_pipeline_step.tex}
+% \clearpage
+\section[Custom Pipeline Steps]{Adding Custom Pipeline Steps}\label{custom-pipeline-steps}%
+\input{child/Appendix/custom-pipeline-step.tex}
+
+
+\section{HiC-Seq Pipeline}
+\input{child/HiC/index.tex}
+\input{child/HiC/align.tex}% __01a-align
+\input{child/HiC/filter.tex} % __02a-filter
+\input{child/HiC/filter-stats.tex}% __02b-filter-stats
+\input{child/HiC/tracks.tex}% __03a-tracks
+\input{child/HiC/matrix-filtered.tex}% __04a-matrix-filtered
+\input{child/HiC/matrix-prep.tex}% __05a-matrix-prep
+\input{child/HiC/matrix-ic.tex}% __06a-matrix-ic
+\input{child/HiC/matrix-hicnorm.tex}% __07a-matrix-hicnorm
+\input{child/HiC/matrix-stats.tex}% __08a-matrix-stats
+\input{child/HiC/compare-matrices.tex}% __09a-compare-matrices
+\input{child/HiC/compare-matrices-stats.tex}% __09b-compare-matrices-stats
+\input{child/HiC/boundary-scores.tex}% __10a-boundary-scores
+\input{child/HiC/boundary-scores-pca.tex}% __10b-boundary-scores-pca
+\input{child/HiC/domains.tex}% __11a-domains
+\input{child/HiC/compare-boundaries.tex}% __12a-compare-boundaries
+\input{child/HiC/compare-boundaries-stats.tex}% __12b-compare-boundaries-stats
+\input{child/HiC/hicplotter.tex}% __13a-hicplotter
+\input{child/HiC/interactions.tex}% __14a-interactions
+\input{child/HiC/annotations.tex}% __15a-annotations
+\input{child/HiC/annotations-stats.tex}% __15b-annotations-stats
+% \clearpage
+
+\section{Appendix}
+\input{child/Appendix/appendix.tex}
+\input{child/Appendix/gtools-hic.tex}
+\input{child/Appendix/pipeline-master-explorer.tex}
+
+% \input{child/Appendix/gtools-overlaps.tex} % don't include this one
+
+% \newpage
+% \pagebreak
+\clearpage
+\subsection{System and Session Information}\label{session}
+This document was created with: \LaTeXe~ \fmtversion
+<<Session>>=
+system('uname -srv',intern=T)
+sessionInfo()
+@
+\input{child/Appendix/file_list_latex.tex}
+
+\end{document}

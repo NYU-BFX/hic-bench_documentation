@@ -1,0 +1,50 @@
+\subsection{Dependencies}\label{Intro:dependencies}
+This pipeline was developed for use in a High Performance Computing environment, running CentOS 6. Additionally, tcsh and bash shells are required, along with R version 3.2.0. The following includes software used in the HiC-Seq pipeline:
+%find . -type f -name "*param*" -exec grep "module load" {} \; | sort -u | cut -d " " -f3
+% uname -srvom
+\begin{lstlisting} 
+OGS/Grid Engine 2011.11
+Linux 2.6.32-573.3.1.el6.x86_64 #1 SMP Thu Aug 13 22:55:16 UTC 2015 x86_64 GNU/Linux
+tcsh 6.17.00 (Astron) 2009-07-10 (x86_64-unknown-linux)
+GNU bash, version 4.1.2(1)-release (x86_64-redhat-linux-gnu)
+armatus/2014-05-19
+bedtools/2.22.0
+bowtie2/2.2.6
+caltads/0.1.0
+ghmm/0.9
+java/1.7
+matlab/R2013a
+picard-tools
+python/2.7.3
+r/3.2.0
+r/3.2.3
+samtools/1.2.1
+\end{lstlisting}
+
+% find . -type f -iname "*.r" -exec grep -l 'require(' {} \;
+% grep -i -B 5 -A 5 'library('
+The following R packages are used in the pipeline:
+\begin{lstlisting} 
+plyr 1.8.1
+VennDiagram 1.6.16
+flsa 1.05
+genlasso 1.3
+ggplot2 1.0.1
+optparse 1.3.0
+pastecs 1.3-18 
+plotrix 3.5-11
+reshape2 1.4.1
+zoo 1.7-12
+preprocessCore 1.24.0
+MASS 7.3-35
+gplots 2.17.0
+reshape 0.8.5
+corrplot 0.73
+RColorBrewer 1.1-2
+lattice 0.20-33
+grid
+stringr 1.0.0
+\end{lstlisting} 
+% > sessionInfo()
+
+For software information specific to the creation of this document, see Section~\ref{session}

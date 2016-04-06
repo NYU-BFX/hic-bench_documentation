@@ -1,0 +1,37 @@
+\subsection{Compare Boundaries}\label{HiC:compare-boundaries}% __12a-compare-boundaries
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{domains} step is used as input (Section~\ref{HiC:domains}).
+
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.standard.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set flank_dist = $bin_size
+set black_lists = ($genome_dir/centrotelo.bed)
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+% See Figure~\ref{fig:} and Figure~\ref{fig:}. 
+Default output: % results/compare-boundaries.by_sample.standard/domains.by_sample.armatus.gamma_0.5/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/hg19/CD34-HindIII-rep1.CD34-HindIII-rep1/
+\begin{lstlisting}
+-rw-r--r--   1 at570 573K Feb 16 00:18 boundaries1.k=001.bed
+-rw-r--r--   1 at570 573K Feb 16 00:18 boundaries2.k=001.bed
+-rw-r--r--   1 at570 268K Feb 16 00:18 common_boundaries.k=001.bed
+-rw-r--r--   1 at570  154 Feb 16 00:18 comparison.tsv
+-rw-r--r--   1 at570 268K Feb 16 00:18 intersection.k=001.bed
+-rw-r--r--   1 at570   70 Feb 16 00:18 job.err
+-rw-r--r--   1 at570   47 Feb 16 00:18 job.id
+-rw-r--r--   1 at570    0 Feb 16 00:18 job.out
+-rw-r--r--   1 at570  456 Feb 16 00:18 job.sh
+-rw-r--r--   1 at570 4.5K Feb 16 00:18 job.vars.tsv
+-rw-r--r--   1 at570 268K Feb 16 00:18 union.k=001.bed
+\end{lstlisting}
+% 
+% \newpage
+\clearpage

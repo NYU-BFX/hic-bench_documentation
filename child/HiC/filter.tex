@@ -1,0 +1,30 @@
+\subsection{Filter}\label{HiC:filter} % __02a-filter
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{align} step is used as input (Section~\ref{HiC:align}).
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.standard.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set filter_params = "--mapq 30 --min-dist 25000 --max-offset 500 --filter-dups"
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+-rw-r--r--  1 at570 1.7G Jan 13 14:26 filtered.reg.gz
+-rw-r--r--  1 at570  65K Jan 13 14:25 job.err
+-rw-r--r--  1 at570   47 Jan 13 13:15 job.id
+-rw-r--r--  1 at570    0 Jan 13 13:15 job.out
+-rw-r--r--  1 at570  195 Jan 13 13:15 job.sh
+-rw-r--r--  1 at570 2.1K Jan 13 14:26 job.vars.tsv
+-rw-r--r--  1 at570  378 Jan 13 14:24 stats.tsv
+\end{lstlisting}
+% 
+% \newpage
+\clearpage

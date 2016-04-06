@@ -1,0 +1,13 @@
+% \section{Modifying the Pipeline} \label{custom-pipeline-step} % requirements for modifying the pipeline
+\begin{enumerate}
+\item Within the \texttt{pipeline} directory, make a copy of an existing pipeline step that is similar to the one you wish to create. This will serve as a template. 
+\item Rename the new pipeline step's directory, and rename the 'run' file it contains to include the new name. Do not rename the \texttt{run} symlink, but adjust it to make sure that it is pointing to the new 'run' file. 
+\item Within the directory symlinked by \texttt{code}, place the ... ... pipeline analysis script e.g. \texttt{code/chipseq-align-stats.tcsh}
+\end{enumerate}
+
+run-align-stats.tcsh run file
+code/chipseq-align-stats.tcsh pipeline analysis script
+
+% To add a custom pipeline step.... 
+% 
+% QQ: Draft here: In addition to programs used for analysis, consideration should also be given to the output format of figures desired for inclusion in the auto-report. PDF format is preferred, though 

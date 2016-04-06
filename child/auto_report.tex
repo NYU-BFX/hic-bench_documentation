@@ -1,0 +1,17 @@
+A reporting template is included with the pipeline, which outputs documents in a \LaTeX beamer presentation format, with one figure per page giving analysis stats based on defined settings within each analysis step. \\
+\\
+\\
+The auto report will iterate over every entry in the index.txt file to discover the pipeline steps included in the analysis. For each step, it will parse the corresponding 'run' file, and look for information given on lines beginning with the following verbatim keywords
+
+\begin{lstlisting}
+#DESCRIPTION: A written description, contained on one line (no returns), which contains a brief text description of the pipeline step to be displayed in the report
+#FIGURE: the name of the figure file output for each sample, in .pdf or .png/.jpg format
+\end{lstlisting}
+
+Report can be compiled with knitr + pdflatex (QQ: give command, e.g. render..), also this will eventually become part of the pipeline execution..
+
+
+
+run file tags
+project into text file
+how report items are aggregated/found, considerations for items to use

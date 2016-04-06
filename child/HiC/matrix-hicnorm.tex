@@ -1,0 +1,51 @@
+\subsection{Matrix HiCNorm}\label{HiC:matrix-hicnorm}% __07a-matrix-hicnorm
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{matrix-filtered} step is used as input (Section~\ref{HiC:matrix-filtered}).
+%~~~~~~~~~~~~~~~~~~~% 
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.standard.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set chrom_excluded = 'chr[MY]'       # excluded chromosomes
+
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/matrix-hicnorm.by_sample.standard/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+drwxr-xr-x  2 at570 3.4K Feb  8 17:10 __jdata
+-rw-r--r--  1 at570  13K Feb  8 17:25 job.err
+-rw-r--r--  1 at570   47 Feb  8 17:06 job.id
+-rw-r--r--  1 at570    0 Feb  8 17:06 job.out
+-rw-r--r--  1 at570  343 Feb  8 17:06 job.sh
+-rw-r--r--  1 at570 3.2K Feb  8 17:25 job.vars.tsv
+-rw-r--r--  1 at570  86M Feb  8 17:19 matrix.chr1.tsv
+-rw-r--r--  1 at570  28M Feb  8 17:10 matrix.chr10.tsv
+-rw-r--r--  1 at570  28M Feb  8 17:12 matrix.chr11.tsv
+-rw-r--r--  1 at570  28M Feb  8 17:10 matrix.chr12.tsv
+-rw-r--r--  1 at570  21M Feb  8 17:09 matrix.chr13.tsv
+-rw-r--r--  1 at570  18M Feb  8 17:09 matrix.chr14.tsv
+-rw-r--r--  1 at570  16M Feb  8 17:09 matrix.chr15.tsv
+-rw-r--r--  1 at570  13M Feb  8 17:09 matrix.chr16.tsv
+-rw-r--r--  1 at570 9.7M Feb  8 17:09 matrix.chr17.tsv
+-rw-r--r--  1 at570  11M Feb  8 17:09 matrix.chr18.tsv
+-rw-r--r--  1 at570 5.3M Feb  8 17:08 matrix.chr19.tsv
+-rw-r--r--  1 at570  85M Feb  8 17:25 matrix.chr2.tsv
+-rw-r--r--  1 at570 6.6M Feb  8 17:10 matrix.chr20.tsv
+-rw-r--r--  1 at570 3.6M Feb  8 17:09 matrix.chr21.tsv
+-rw-r--r--  1 at570 3.8M Feb  8 17:09 matrix.chr22.tsv
+-rw-r--r--  1 at570  58M Feb  8 17:17 matrix.chr3.tsv
+-rw-r--r--  1 at570  55M Feb  8 17:20 matrix.chr4.tsv
+-rw-r--r--  1 at570  49M Feb  8 17:15 matrix.chr5.tsv
+-rw-r--r--  1 at570  44M Feb  8 17:15 matrix.chr6.tsv
+-rw-r--r--  1 at570  38M Feb  8 17:17 matrix.chr7.tsv
+-rw-r--r--  1 at570  33M Feb  8 17:14 matrix.chr8.tsv
+-rw-r--r--  1 at570  29M Feb  8 17:13 matrix.chr9.tsv
+-rw-r--r--  1 at570  34M Feb  8 17:15 matrix.chrX.tsv
+\end{lstlisting}
+\clearpage

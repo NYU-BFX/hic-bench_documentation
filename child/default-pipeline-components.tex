@@ -1,0 +1,290 @@
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsection{Parent Directory Overview}
+A default pipeline will have the following basic structure within its parent directory:
+\begin{lstlisting}
+hicseq.analysis-for-hicbench$
+lrwxrwxrwx  1 at570  14 Feb 14 19:28 __01a-align -> pipeline/align
+lrwxrwxrwx  1 at570  15 Feb 14 19:28 __02a-filter -> pipeline/filter
+lrwxrwxrwx  1 at570  21 Feb 14 19:28 __02b-filter-stats -> pipeline/filter-stats
+lrwxrwxrwx  1 at570  15 Feb 14 19:28 __03a-tracks -> pipeline/tracks
+lrwxrwxrwx  1 at570  24 Feb 14 19:28 __04a-matrix-filtered -> pipeline/matrix-filtered
+lrwxrwxrwx  1 at570  20 Feb 14 19:28 __05a-matrix-prep -> pipeline/matrix-prep
+lrwxrwxrwx  1 at570  18 Feb 14 19:28 __06a-matrix-ic -> pipeline/matrix-ic
+lrwxrwxrwx  1 at570  23 Feb 14 19:28 __07a-matrix-hicnorm -> pipeline/matrix-hicnorm
+lrwxrwxrwx  1 at570  21 Feb 14 19:28 __08a-matrix-stats -> pipeline/matrix-stats
+lrwxrwxrwx  1 at570  25 Feb 14 19:28 __09a-compare-matrices -> pipeline/compare-matrices
+lrwxrwxrwx  1 at570  31 Feb 14 19:28 __09b-compare-matrices-stats -> pipeline/compare-matrices-stats
+lrwxrwxrwx  1 at570  24 Feb 14 19:28 __10a-boundary-scores -> pipeline/boundary-scores
+lrwxrwxrwx  1 at570  28 Feb 14 19:28 __10b-boundary-scores-pca -> pipeline/boundary-scores-pca
+lrwxrwxrwx  1 at570  16 Feb 14 19:28 __11a-domains -> pipeline/domains
+lrwxrwxrwx  1 at570  27 Feb 14 19:28 __12a-compare-boundaries -> pipeline/compare-boundaries
+lrwxrwxrwx  1 at570  33 Feb 14 19:28 __12b-compare-boundaries-stats -> pipeline/compare-boundaries-stats
+lrwxrwxrwx  1 at570  19 Feb 14 19:28 __13a-hicplotter -> pipeline/hicplotter
+lrwxrwxrwx  1 at570  21 Feb 14 19:28 __14a-interactions -> pipeline/interactions
+lrwxrwxrwx  1 at570  20 Feb 14 19:28 __15a-annotations -> pipeline/annotations
+lrwxrwxrwx  1 at570  26 Feb 14 19:28 __15b-annotations-stats -> pipeline/annotations-stats
+lrwxrwxrwx  1 at570  30 Feb 18 11:16 code -> code.repo/code.hicseq-standard
+lrwxrwxrwx  1 at570  14 Nov 12 11:55 code.main -> code/code.main
+drwxr-xr-x 10 at570 238 Feb 15 19:53 code.repo
+lrwxrwxrwx  1 at570  36 Mar 10 16:30 data -> /ifs/home/at570/pipeline-master/data
+drwxr-xr-x  5 at570 230 Jan  5 09:24 inputs
+drwxr-xr-x 25 at570 834 Feb 14 19:28 pipeline
+-rwxr-xr-x  1 at570 981 Jan  5 19:40 run
+-rwxr-xr-x  1 at570 554 Dec 18 17:02 run.dry
+\end{lstlisting}
+
+
+The following components can be seen here:
+\begin{itemize}
+\item \texttt{\_\_01a-align ... \_\_15b-annotations-stats}: Symlinks to each step in the pipeline, in alphanumeric order of execution.
+\item \texttt{code}: Symlink to the directory containing scripts and code specific to the current analysis type e.g. ChIP-Seq.
+\item \texttt{code.main}: Symlink to the directory containing scripts and code used for all pipelines.
+\item \texttt{code.repo}: Directory containing all code for the project, copied from the main pipeline repository. 
+\item \texttt{data}: Symlink to a directory containing reference genome data; set this in your original repository clone. 
+\item \texttt{inputs}: Directory containing information on the files used as inputs.
+\item \texttt{pipeline}: Directory containing the files needed for each step in the pipeline.
+\item \texttt{project\_notes}: A bare directory in which you can place miscellaneous notes and documents concerning the analysis.
+\item \texttt{run}: File containing code for running the pipeline. 
+\item \texttt{run.dry}: File containing code for testing the pipeline without execution of pipeline steps. 
+\end{itemize}
+
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsection{Code Directories}
+The code needed for the execution of the analysis pipeline is divided among several sub-directories, based on usage. Within an analysis pipeline, the directory \texttt{code.repo} contains all of these sub-directories.
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/code.repo$
+drwxr-xr-x  2 at570  434 Dec 30 11:47 bin
+drwxr-xr-x  3 at570 1.7K Feb 15 19:53 code.chipseq-standard
+drwxr-xr-x  3 at570 2.4K Feb 15 13:28 code.hicseq-standard
+drwxr-xr-x  2 at570 2.1K Feb 15 19:53 code.main
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{bin}: A directory containing symlinks to binary files for programs used by the pipeline. %For details, see Section~\ref{dependency}
+\item \texttt{code.chipseq-standard, code.hicseq-standard}: Directories containing scripts specific to the execution of each step in the the given type of pipeline analysis.
+\item \texttt{code.main}: A directory containing code and scripts used for all analysis pipelines. 
+\end{itemize}
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsection{Data Directory}\label{Pipeline:data}
+The reference genome information needed for analysis is contained in the \path{data} directory. This can be contained in an external location and symlinked to the project directory if it has not already been set in the cloned HiC-bench repository template. Our example \path{data} contains only the subdirectory \path{genomes}, which is configured as such:
+
+\begin{lstlisting}
+data/genomes/hg19$
+-rw-r--r-- 1 at570 at570  36M Nov 23 12:43 HindIII.fragments.bed
+-rw-r--r-- 1 at570 at570 298M Mar  7 15:58 MboI.fragments.bed
+-rw-r--r-- 1 at570 at570  32M Nov 23 12:43 NcoI.fragments.bed
+lrwxrwxrwx 1 at570 at570   20 Nov 23 12:41 bowtie2.index -> genome/bowtie2.index
+-rw-r--r-- 1 at570 at570 1.5K Nov 23 13:43 centrotelo.bed
+drwxr-xr-x 2 at570 at570 1.2K Mar  7 16:00 features-hicnorm
+-rw-r--r-- 1 at570 at570 2.2M Dec 30 22:58 gene-name.bed
+-rw-r--r-- 1 at570 at570 2.2M Nov 30 15:43 gene.bed
+lrwxrwxrwx 1 at570 at570   33 Nov 23 12:34 genome -> /ifs/home/at570/Data/Genomes/hg19
+-rw-r--r-- 1 at570 at570  564 Nov 23 13:43 genome.bed
+
+data/genomes/mm10$
+-rw-r--r-- 1 at570 at570  36M Nov 23 12:47 HindIII.fragments.bed
+-rw-r--r-- 1 at570 at570  37M Nov 23 12:47 NcoI.fragments.bed
+lrwxrwxrwx 1 at570 at570   20 Nov 23 12:47 bowtie2.index -> genome/bowtie2.index
+-rw-r--r-- 1 at570 at570 1.3K Nov 23 13:48 centrotelo.bed
+drwxr-xr-x 2 at570 at570 1.2K Mar  7 16:00 features-hicnorm
+-rw-r--r-- 1 at570 at570 1.4M Dec 30 22:58 gene-name.bed
+-rw-r--r-- 1 at570 at570 1.4M Nov 30 15:43 gene.bed
+lrwxrwxrwx 1 at570 at570   33 Nov 23 12:47 genome -> /ifs/home/at570/Data/Genomes/mm10
+-rw-r--r-- 1 at570 at570  495 Nov 23 13:48 genome.bed
+\end{lstlisting}
+
+Also included are indexes for \texttt{bowtie2}, which can be obtained from \url{bowtie-bio.sourceforge.net/bowtie2/manual.shtml} or \url{http://support.illumina.com/sequencing/sequencing_software/igenome.html}.
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsection{Inputs Directory}\label{Pipeline:inputs}
+The \texttt{inputs} directory contains files needed to run the pipeline.
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/inputs$
+-rw-r--r-- 1 at570  483 Dec 28 12:20 README
+lrwxrwxrwx 1 at570    7 Oct  1 14:31 code -> ../code
+lrwxrwxrwx 1 at570    7 Dec 21 08:19 data -> ../data
+drwxr-xr-x 2 at570  685 Oct 27 13:46 fastq
+lrwxrwxrwx 1 at570   12 Jan  5 09:23 genomes -> data/genomes
+drwxr-xr-x 2 at570   29 Feb 15 13:30 params
+lrwxrwxrwx 1 at570    5 Feb 11 15:24 results -> fastq
+-rw-r--r-- 1 at570 4.0K Feb 11 15:25 sample-sheet.tsv
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{README}: File containing usage notes for the inputs directory.
+\item \texttt{code}: Symlink to \texttt{code} one level up in the parent directory.
+\item \texttt{data}: Symlink to \texttt{data} one level up in the parent directory.
+\item \texttt{fastq}: Directory containing sub-directories for each sample to be used in the analysis. This directory is not created automatically, it must be created and populated manually. Alternatively, the directory \texttt{bam} can be used in its place if .bam files are to be used. 
+\item \texttt{genomes}: Symlink to the directory containing reference genome information, within the \texttt{data} directory. 
+\item \texttt{params}: Directory containing the parameters files associated with the input files. 
+\item \texttt{sample-sheet.tsv}: Sample sheet for pipeline execution.
+\end{itemize}
+
+\subsubsection{FASTQ Directory}
+The contents of an example \texttt{fastq} directory can be seen here:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/inputs/fastq$ 
+lrwxrwxrwx 1 at570  97 Feb 12 15:43 CD34-HindIII-rep1
+lrwxrwxrwx 1 at570  95 Feb 12 15:43 GM-HindIII-rep1
+lrwxrwxrwx 1 at570  92 Feb 12 15:43 GM-NcoI-rep1
+lrwxrwxrwx 1 at570 103 Feb 12 15:43 H1-HindIII-Ren2015_rep1
+lrwxrwxrwx 1 at570 103 Feb 12 15:43 H1-HindIII-Ren2015_rep2
+lrwxrwxrwx 1 at570  95 Feb 12 15:43 H1-HindIII-rep1
+lrwxrwxrwx 1 at570  95 Feb 12 15:43 H1-HindIII-rep2
+lrwxrwxrwx 1 at570  98 Feb 12 15:43 IMR90-HindIII-rep1
+lrwxrwxrwx 1 at570  98 Feb 12 15:43 IMR90-HindIII-rep2
+lrwxrwxrwx 1 at570 100 Feb 12 15:43 T47D_T0-HindIII-rep1
+lrwxrwxrwx 1 at570  97 Feb 12 15:43 T47D_T0-NcoI-rep1
+lrwxrwxrwx 1 at570 101 Feb 12 15:43 T47D_T60-HindIII-rep1
+lrwxrwxrwx 1 at570  98 Feb 12 15:43 T47D_T60-NcoI-rep1
+lrwxrwxrwx 1 at570 100 Feb 12 15:43 mESC_J1-HindIII-rep1
+lrwxrwxrwx 1 at570 100 Feb 12 15:43 mESC_J1-HindIII-rep2
+lrwxrwxrwx 1 at570  97 Feb 12 15:43 mESC_J1-NcoI-rep1
+\end{lstlisting}
+
+Each directory name contains information about the sample, in the format \path{<CellLine>-<treatment>-<SampleID>}. This format can be modified to suit your purposes, though it is recommended to retain the "-" character as a delimiter since it is used downstream in the sample sheet generation steps. Each directory should contain all of the .fastq / .fastq.gz files associated with the sample; symlinks pointing to each file can be used as well, and are encouraged in order to save disk space. The same protocol should be followed if .bam files are to be used. As per standard Linux Terminal guidelines, spaces and special characters should be avoided in file names and directory names. 
+
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsection{Pipeline Directory}
+The \texttt{pipeline} directory contains information for each step in the pipeline. An example \texttt{pipeline} directory will have the following structure: 
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline$
+drwxr-xr-x  5 at570 228 Feb 15 16:47 align
+drwxr-xr-x  5 at570 207 Jan 19 22:12 annotations
+drwxr-xr-x  5 at570 213 Feb 16 17:24 annotations-stats
+drwxr-xr-x  5 at570 211 Feb  6 17:46 boundary-scores
+drwxr-xr-x  5 at570 389 Mar 10 18:16 boundary-scores-pca
+lrwxrwxrwx  1 at570   7 Dec  2 12:39 code -> ../code
+lrwxrwxrwx  1 at570  12 Dec  2 12:39 code.main -> ../code.main
+drwxr-xr-x  5 at570 385 Jan 19 22:08 compare-boundaries
+drwxr-xr-x  5 at570 437 Mar 10 18:16 compare-boundaries-stats
+drwxr-xr-x  5 at570 212 Jan 19 16:04 compare-matrices
+drwxr-xr-x  5 at570 429 Mar 10 18:15 compare-matrices-stats
+drwxr-xr-x  4 at570 420 Jan 19 22:10 diff-domains
+drwxr-xr-x  5 at570 231 Jan 20 13:06 domains
+drwxr-xr-x  5 at570 229 Jan 19 16:19 filter
+drwxr-xr-x  6 at570 256 Jan 19 15:53 filter-stats
+drwxr-xr-x  5 at570 206 Jan 19 22:11 hicplotter
+-rw-r--r--  1 at570 331 Feb 14 19:28 index.txt
+lrwxrwxrwx  1 at570   9 Dec  2 12:39 inputs -> ../inputs
+drwxr-xr-x  5 at570 208 Jan 19 22:12 interactions
+drwxr-xr-x  4 at570 362 Jan 19 16:01 matrix-estimated
+drwxr-xr-x  5 at570 211 Jan 19 16:08 matrix-filtered
+drwxr-xr-x  5 at570 794 Feb  7 17:05 matrix-hicnorm
+drwxr-xr-x  5 at570 205 Jan 19 16:00 matrix-ic
+drwxr-xr-x  5 at570 207 Jan 19 15:59 matrix-prep
+drwxr-xr-x  5 at570 361 Jan 19 16:03 matrix-stats
+drwxr-xr-x  4 at570 158 Dec 22 17:44 template
+drwxr-xr-x  5 at570 229 Jan 19 15:55 tracks
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{align ... qc}: Directories containing the information for each pipeline step. 
+\item \texttt{code}: Symlink to the directory containing code specific to current the analysis type.
+\item \texttt{code.main}: Symlink to the directory containing code used for all analyses. 
+\item \texttt{inputs}: Symlink to the \texttt{inputs} directory containing the .fastq or .bam files for the pipeline.
+\item \texttt{index.txt}: A text file containing a list of pipeline steps to be executed. Entries in this document match the names of the pipeline directories. 
+\end{itemize}
+
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsubsection{Pipeline Index}
+The file \texttt{index.txt} contains a list of the pipeline steps to be completed during the analysis, listed in order of completion. An example \texttt{index.txt} would have the following structure:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline$ cat index.txt
+align
+
+filter
+filter-stats
+
+tracks
+
+matrix-filtered
+
+matrix-prep
+
+matrix-ic
+
+matrix-hicnorm
+
+#matrix-estimated
+#
+matrix-stats
+
+compare-matrices
+compare-matrices-stats
+
+boundary-scores
+boundary-scores-pca
+
+domains
+
+compare-boundaries
+compare-boundaries-stats
+
+#diff-domains
+#
+hicplotter
+
+interactions
+
+annotations
+annotations-stats
+\end{lstlisting}
+
+Each entry in the \texttt{index.txt} file matches the name of the pipeline step to be completed, represented by the corresponding name of the step's sub-directory in the \texttt{pipeline} directory. One entry is allowed per line in the \texttt{index.txt} file. Entries that begin with a '\#' character will be ignored, and pipeline steps that are not included in the \texttt{index.txt} file will not be included in the analysis pipeline. 
+
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsubsection{Example Pipeline Step Directory Structure}
+Each step in the pipeline is represented by a sub-directory in the \texttt{pipeline} directory. An example sub-directory for a pipeline step would have the following structure:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/align$
+lrwxrwxrwx  1 at570  15 Oct 28 12:10 clean.tcsh -> code/clean.tcsh
+lrwxrwxrwx  1 at570   7 Sep 29 13:31 code -> ../code
+-rw-r--r--  1 at570   0 Jan 25 11:12 error.log
+drwxr-xr-x  2 at570  24 Feb 15 16:47 inpdirs
+lrwxrwxrwx  1 at570   9 Sep 29 13:31 inputs -> ../inputs
+drwxr-xr-x  2 at570  77 Dec 28 13:42 params
+drwxr-xr-x  3 at570  62 Feb 16 12:27 results
+lrwxrwxrwx  1 at570  14 Jan 19 15:50 run -> run-align.tcsh
+-rwxr-xr-x  1 at570 971 Jan 19 15:49 run-align.tcsh
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{clean.tcsh}: Script for cleaning the directory; remove results and error logs.
+\item \texttt{code}: Symlink to the directory containing code specific to the analysis type e.g. \texttt{code.chipseq-standard} in this case.
+\item \texttt{error.log}: File containing errors encountered during execution of the pipeline step, generated at runtime.
+\item \texttt{inpdirs}: Directory containing symlinks to directories containing input files for use during execution of the pipeline step.
+\item \texttt{inputs}: Symlink to the directory containing input files.
+\item \texttt{params}: Directory containing the parameters files associated with the pipeline step files. 
+\item \texttt{run}: Symlink to the 'run' file for the pipeline step.
+\item \texttt{run-align.tcsh}: 'Run' file for the pipeline step, containing a script that passes pipeline execution information to the wrapper script located in \texttt{./code/code.main/pipeline-master-explorer.r}. 
+\end{itemize}
+% ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ % ~~~~~~~~~~~ 
+\subsubsection{Example Pipeline Step Results Directory}
+The base level of a results directory for a pipeline step will have the following structure:
+
+\begin{lstlisting}
+hicseq.analysis-for-hicbench/pipeline/align/results/align.by_sample.bowtie2/CD34-HindIII-rep1$
+-rw-r--r--  1 at570  49G Jan 13 01:02 alignments.bam
+-rw-r--r--  1 at570  473 Jan 13 01:02 job.err
+-rw-r--r--  1 at570   47 Jan 12 18:42 job.id
+-rw-r--r--  1 at570    0 Jan 12 18:42 job.out
+-rw-r--r--  1 at570  136 Jan 12 18:42 job.sh
+-rw-r--r--  1 at570 2.3K Jan 13 01:02 job.vars.tsv
+\end{lstlisting}
+
+\begin{itemize}
+\item \texttt{alignments.bam}: Example alignment output file.
+\item \texttt{job.err}: File containing the standard error output of the pipeline step. 
+\item \texttt{job.id}: File containing the ID number of the job after submission for execution on the HPC cluster.
+\item \texttt{job.out}: File containing the standard output of the pipeline step. 
+\item \texttt{job.sh}: File containing the command submitted for execution on the HPC cluster.
+\item \texttt{job.vars.tsv}: File containing the variables used in the completion of the pipeline step.
+\end{itemize}
+
+\clearpage

@@ -1,0 +1,40 @@
+\subsection{Annotations}\label{HiC:annotations}% __15a-annotations
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{interactions} step is used as input (Section~\ref{HiC:interactions}).
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.standard.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set genes_bed = $genome_dir/gene.bed                         # gene BED6 file for annotation of interactions
+set cell_type = `echo $objects[1] | cut -d'-' -f1`
+if (! -e inputs/data.external/$cell_type) then
+  set loci_bed = ()
+else
+  set loci_bed = `find inputs/data.external/$cell_type -maxdepth 1 -name '*.bed'`
+endif
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output:
+\begin{lstlisting}
+-rw-r--r--  1 at570 5.9M Feb  5 17:33 bin.annotated.tsv
+-rw-r--r--  1 at570 3.8M Feb  5 17:33 bin.gene.tsv
+-rw-r--r--  1 at570 7.5M Feb  5 17:33 bin.loci.tsv
+-rw-r--r--  1 at570 8.7M Feb  5 17:33 bin.reg
+-rw-r--r--  1 at570 5.4K Feb  5 17:33 job.err
+-rw-r--r--  1 at570   47 Feb  5 17:32 job.id
+-rw-r--r--  1 at570    0 Feb  5 17:33 job.out
+-rw-r--r--  1 at570  434 Feb  5 17:32 job.sh
+-rw-r--r--  1 at570 3.1K Feb  5 17:33 job.vars.tsv
+-rw-r--r--  1 at570  42M Feb  5 17:33 loci.reg
+-rw-r--r--  1 at570  45M Feb  5 17:33 table.annotated.tsv
+\end{lstlisting}
+% 
+% \newpage
+\clearpage

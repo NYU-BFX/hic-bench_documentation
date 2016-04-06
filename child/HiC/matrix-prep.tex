@@ -1,0 +1,59 @@
+\subsection{Matrix Prep}\label{HiC:matrix-prep} % __05a-matrix-prep
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{matrix-filtered} step is used as input (Section~\ref{HiC:matrix-filtered}).
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.scale_impute.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set chrom_excluded = 'chr[MY]'       # excluded chromosomes
+set prep_params = "--scale --impute"
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/matrix-prep.by_sample.scale_impute/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+drwxr-xr-x  2 at570 3.4K Jan 13 16:16 __jdata
+-rw-r--r--  1 at570 4.0K Jan 13 16:18 job.err
+-rw-r--r--  1 at570   47 Jan 13 16:14 job.id
+-rw-r--r--  1 at570    0 Jan 13 16:15 job.out
+-rw-r--r--  1 at570  345 Jan 13 16:14 job.sh
+-rw-r--r--  1 at570 3.3K Jan 13 16:18 job.vars.tsv
+-rw-r--r--  1 at570 371M Jan 13 16:17 matrix.chr1.tsv
+-rw-r--r--  1 at570 110M Jan 13 16:16 matrix.chr10.tsv
+-rw-r--r--  1 at570 109M Jan 13 16:15 matrix.chr11.tsv
+-rw-r--r--  1 at570 107M Jan 13 16:16 matrix.chr12.tsv
+-rw-r--r--  1 at570  80M Jan 13 16:16 matrix.chr13.tsv
+-rw-r--r--  1 at570  69M Jan 13 16:16 matrix.chr14.tsv
+-rw-r--r--  1 at570  63M Jan 13 16:16 matrix.chr15.tsv
+-rw-r--r--  1 at570  49M Jan 13 16:16 matrix.chr16.tsv
+-rw-r--r--  1 at570  40M Jan 13 16:16 matrix.chr17.tsv
+-rw-r--r--  1 at570  37M Jan 13 16:16 matrix.chr18.tsv
+-rw-r--r--  1 at570  21M Jan 13 16:16 matrix.chr19.tsv
+-rw-r--r--  1 at570 353M Jan 13 16:17 matrix.chr2.tsv
+-rw-r--r--  1 at570  24M Jan 13 16:16 matrix.chr20.tsv
+-rw-r--r--  1 at570  14M Jan 13 16:16 matrix.chr21.tsv
+-rw-r--r--  1 at570  16M Jan 13 16:16 matrix.chr22.tsv
+-rw-r--r--  1 at570 234M Jan 13 16:17 matrix.chr3.tsv
+-rw-r--r--  1 at570 219M Jan 13 16:17 matrix.chr4.tsv
+-rw-r--r--  1 at570 196M Jan 13 16:17 matrix.chr5.tsv
+-rw-r--r--  1 at570 175M Jan 13 16:17 matrix.chr6.tsv
+-rw-r--r--  1 at570 152M Jan 13 16:17 matrix.chr7.tsv
+-rw-r--r--  1 at570 128M Jan 13 16:17 matrix.chr8.tsv
+-rw-r--r--  1 at570 120M Jan 13 16:17 matrix.chr9.tsv
+-rw-r--r--  1 at570 144M Jan 13 16:17 matrix.chrX.tsv
+\end{lstlisting}
+% 
+% \begin{figure}[!h]
+%     \centering
+%     \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figure/filter_stats_counts}
+%     \caption{Filter Stats counts sample output} % boundary-scores-pca/results/boundary-scores-pca.standard/boundary-scores.by_sample.standard/matrix-estimated.by_sample.prep_distlog2.fused1d/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/hg19/all-samples/pca.novel-max.k\=001.pdf
+%     \label{fig:filter-stats-counts}
+% \end{figure}
+% \newpage
+\clearpage

@@ -1,0 +1,120 @@
+\subsection{Matrix Filtered}\label{HiC:matrix-filtered} % __04a-matrix-filtered
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline \texttt{filter} step is used as input (Section~\ref{HiC:filter}).
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters files:
+
+\begin{lstlisting}
+-rwxr-xr-x 1 at570 195 Nov 24 11:20 params.res_1000kb.tcsh
+-rwxr-xr-x 1 at570 194 Nov 25 15:11 params.res_100kb.tcsh
+-rwxr-xr-x 1 at570 210 Dec  1 12:41 params.res_10kb.maxd_5Mb.rotate45.tcsh
+-rwxr-xr-x 1 at570 193 Nov 30 16:22 params.res_10kb.tcsh
+-rwxr-xr-x 1 at570 193 Nov 24 11:20 params.res_40kb.tcsh
+\end{lstlisting}
+
+Default parameters:
+
+\begin{lstlisting}
+params.res_1000kb.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set bin_size = 1000000
+set max_dist = 0
+set ref = $genome_dir/genome.bed
+set matrix_params = "--bin-size $bin_size --max-dist $max_dist -R $ref"
+\end{lstlisting}
+
+
+\begin{lstlisting}
+params.res_100kb.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set bin_size = 100000
+set max_dist = 0
+set ref = $genome_dir/genome.bed
+set matrix_params = "--bin-size $bin_size --max-dist $max_dist -R $ref"
+\end{lstlisting}
+
+
+\begin{lstlisting}
+params.res_10kb.maxd_5Mb.rotate45.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set bin_size = 10000
+set max_dist = 5000000
+set ref = $genome_dir/genome.bed
+set matrix_params = "--bin-size $bin_size --max-dist $max_dist --rotate45 -R $ref"
+\end{lstlisting}
+
+
+\begin{lstlisting}
+params.res_10kb.tcsh
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set bin_size = 10000
+set max_dist = 0
+set ref = $genome_dir/genome.bed
+set matrix_params = "--bin-size $bin_size --max-dist $max_dist -R $ref"
+\end{lstlisting}
+
+
+\begin{lstlisting}
+params.res_40kb.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set bin_size = 40000
+set max_dist = 0
+set ref = $genome_dir/genome.bed
+set matrix_params = "--bin-size $bin_size --max-dist $max_dist -R $ref"
+\end{lstlisting}
+
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+
+\begin{lstlisting}
+-rw-r--r--  1 at570  56K Jan 13 15:57 ignored_loci.txt
+-rw-r--r--  1 at570 9.6K Jan 13 16:02 job.err
+-rw-r--r--  1 at570   47 Jan 13 15:57 job.id
+-rw-r--r--  1 at570    0 Jan 13 15:57 job.out
+-rw-r--r--  1 at570  266 Jan 13 15:57 job.sh
+-rw-r--r--  1 at570 2.7K Jan 13 16:02 job.vars.tsv
+-rw-r--r--  1 at570  75M Jan 13 16:01 matrix.chr1.tsv
+-rw-r--r--  1 at570  23M Jan 13 16:01 matrix.chr10.tsv
+-rw-r--r--  1 at570  22M Jan 13 16:01 matrix.chr11.tsv
+-rw-r--r--  1 at570  22M Jan 13 16:01 matrix.chr12.tsv
+-rw-r--r--  1 at570  16M Jan 13 16:01 matrix.chr13.tsv
+-rw-r--r--  1 at570  14M Jan 13 16:01 matrix.chr14.tsv
+-rw-r--r--  1 at570  13M Jan 13 16:01 matrix.chr15.tsv
+-rw-r--r--  1 at570 9.9M Jan 13 16:01 matrix.chr16.tsv
+-rw-r--r--  1 at570 8.0M Jan 13 16:01 matrix.chr17.tsv
+-rw-r--r--  1 at570 7.4M Jan 13 16:01 matrix.chr18.tsv
+-rw-r--r--  1 at570 4.3M Jan 13 16:01 matrix.chr19.tsv
+-rw-r--r--  1 at570  71M Jan 13 16:01 matrix.chr2.tsv
+-rw-r--r--  1 at570 4.9M Jan 13 16:01 matrix.chr20.tsv
+-rw-r--r--  1 at570 2.9M Jan 13 16:01 matrix.chr21.tsv
+-rw-r--r--  1 at570 3.3M Jan 13 16:01 matrix.chr22.tsv
+-rw-r--r--  1 at570  48M Jan 13 16:01 matrix.chr3.tsv
+-rw-r--r--  1 at570  44M Jan 13 16:01 matrix.chr4.tsv
+-rw-r--r--  1 at570  40M Jan 13 16:01 matrix.chr5.tsv
+-rw-r--r--  1 at570  36M Jan 13 16:02 matrix.chr6.tsv
+-rw-r--r--  1 at570  31M Jan 13 16:02 matrix.chr7.tsv
+-rw-r--r--  1 at570  26M Jan 13 16:02 matrix.chr8.tsv
+-rw-r--r--  1 at570  24M Jan 13 16:02 matrix.chr9.tsv
+-rw-r--r--  1 at570   29 Jan 13 16:02 matrix.chrM.tsv
+-rw-r--r--  1 at570  29M Jan 13 16:02 matrix.chrX.tsv
+-rw-r--r--  1 at570 4.3M Jan 13 16:02 matrix.chrY.tsv
+\end{lstlisting}
+\clearpage

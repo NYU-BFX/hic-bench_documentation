@@ -1,0 +1,42 @@
+\subsection{Boundary Scores}\label{HiC:boundary-scores}% __10a-boundary-scores
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline steps %\texttt{matrix-estimated}) (Section~\ref{HiC:matrix-estimated}), % this one removed
+\texttt{matrix-filtered} (Section~\ref{HiC:matrix-filtered}), \texttt{matrix-hicnorm} (Section~\ref{HiC:matrix-hicnorm}), \texttt{matrix-prep} (Section~\ref{HiC:matrix-prep}), and \texttt{matrix-ic} (Section~\ref{HiC:matrix-ic}) are used as input.
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.standard.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set chrom_excluded = 'chr[MYX]'                                                      # excluded chromosomes
+
+set boundary_scores_params = ( \
+--min-lambda=0.0 --max-lambda=1.0 --n-lambda=6 --gamma=0 \
+--preprocess=none \
+--distance=`echo 500000/$bin_size | bc` \
+--distance2=`echo 500000/$bin_size | bc` \
+--skip-distance=0 \
+--flank-dist=`echo 500000/$bin_size | bc` \
+--tolerance=0.01 \
+--alpha=0.50 \
+--track-dist=`echo 2000000/$bin_size | bc` \
+--presentation=none \
+)
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/boundary-scores.by_sample.standard/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+-rw-r--r--  1 at570 9.0M Feb 15 14:25 all_scores.k=001.tsv
+-rw-r--r--  1 at570  17K Feb 15 14:25 job.err
+-rw-r--r--  1 at570   47 Feb 15 14:07 job.id
+-rw-r--r--  1 at570    0 Feb 15 14:11 job.out
+-rw-r--r--  1 at570  345 Feb 15 14:07 job.sh
+-rw-r--r--  1 at570 3.2K Feb 15 14:25 job.vars.tsv
+\end{lstlisting}
+% \newpage
+\clearpage

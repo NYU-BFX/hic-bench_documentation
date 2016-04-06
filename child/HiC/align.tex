@@ -1,0 +1,31 @@
+\subsection{Alignment}\label{HiC:align} % __01a-align
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Raw data in fastq or fastq.gz files (Section~\ref{Pipeline:inputs}). 
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.bowtie2.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set aligner = bowtie2
+set genome = `./code/read-sample-sheet.tcsh $sheet $object genome`
+set genome_index = inputs/genomes/$genome/bowtie2.index/genome
+set align_params = "--very-sensitive-local --local"
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: % results/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+-rw-r--r--  1 at570  49G Jan 13 01:02 alignments.bam
+-rw-r--r--  1 at570  473 Jan 13 01:02 job.err
+-rw-r--r--  1 at570   47 Jan 12 18:42 job.id
+-rw-r--r--  1 at570    0 Jan 12 18:42 job.out
+-rw-r--r--  1 at570  136 Jan 12 18:42 job.sh
+-rw-r--r--  1 at570 2.3K Jan 13 01:02 job.vars.tsv
+\end{lstlisting}
+% 
+\clearpage 

@@ -1,0 +1,427 @@
+\subsection[gtools-overlaps]{Other Pipeline Software: gtools-overlaps}\label{gtools-overlaps}%
+% \subsection{Error Logs}
+% Errors encountered during pipeline execution can be viewed with:
+% 
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps
+
+USAGE:
+  gtools-overlaps OPERATION [OPTIONS] REGION-FILE(S)
+
+VERSION:
+  genomic-tools 3.0.0
+
+DESCRIPTION:
+  Performs overlap operations between a test and a reference set of genomic regions.
+
+OPERATION:
+  annotate        Annotates test regions according to reference regions.
+  annotate2       Annotates test regions according to reference regions (version 2).
+  bin             Finds overlaps of interval pairs with reference regions.
+  count           Counts the number of overlapping test regions per reference region.
+  coverage        Calculates the depth coverage (i.e. the total number of overlapping nucleotides) per reference region.
+  density         Computes the density (i.e. the coverage divided by the size of the reference region) of overlaps per reference region.
+  dist            Computes the distance between a pair of intervals given breakpoints in reference file (e.g. restriction enzyme sites) [UNDER DEVELOPMENT].
+  intersect       Computes the intersection between all pairs of test and reference regions. Results are grouped by test region.
+  offset          Computes the distances of test regions from their overlapping reference regions.
+  overlap         Finds the overlaps between all pairs of test and reference regions. Results are grouped by test region.
+  reduce          Reduces number of input regions by removing regions covered by some higher-rank region.
+  rpkm            Computing reference region RPKM values.
+  subset          Picks a subset of test regions depending on their overlap with reference regions. Results are grouped by test region.
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps annotate}\label{gtools-overlaps_annotate}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps annotate
+
+USAGE:
+  gtools-overlaps annotate [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Annotates test regions according to reference regions.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Test region requirements: single-interval
+  * Reference region requirements: single-interval
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  --query-op                query operation for comparison with reference: {center|overlap}         [overlap]
+  --upstream-max            maximum allowed upstream region size                                    [100000]
+  --upstream-min            minimum allowed upstream region size (subject to genomic bounds)        [10000]
+  --distance-flag           add proximal-distal indication                                          [false]
+  --proximal-dist           define proximal distance (in nucleotides)                               [1000]
+  --print-header            print header                                                            [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps annotate2}\label{gtools-overlaps_annotate2}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps annotate2
+
+USAGE:
+  gtools-overlaps annotate2 [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Annotates test regions according to reference regions (version 2).
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Test region requirements: single-interval
+  * Reference region requirements: single-interval
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  --query-op                query operation for comparison with reference: {center|overlap}         [overlap]
+  --upstream-dist           maximum allowed upstream region size                                    [100000]
+  --downstream-dist         maximum allowed downstream region size                                  [100000]
+  --proximal-dist           define proximal distance (in nucleotides)                               [1000]
+  --print-header            print header                                                            [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps bin}\label{gtools-overlaps_bin}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps bin
+
+USAGE:
+  gtools-overlaps bin [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Finds overlaps of interval pairs with reference regions.
+
+DETAILS:
+  * Test region file format: REG, GFF, BED, SAM (but only REG allows interchromosomal associations)
+  * Reference region file format: REG, GFF, BED, SAM
+  * Operands: interval-pairs, region-set
+  * Test region requirements: interval-pairs
+  * Reference region requirements: chromosome/strand-compatible, sorted and non-overlapping
+  * Test region-set requirements: none
+  * Reference region-set requirements: none
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  --print-labels            print test region labels                                                [false]
+  --print-regions           print test regions                                                      [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps count}\label{gtools-overlaps_count}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps count
+
+USAGE:
+  gtools-overlaps count [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Counts the number of overlapping test regions per reference region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  --max-label-value         maximum region label value to be used                                   [1]
+  -min                      minimum count                                                           [0]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps coverage}\label{gtools-overlaps_coverage}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps coverage
+
+USAGE:
+  gtools-overlaps coverage [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Calculates the depth coverage (i.e. the total number of overlapping nucleotides) per reference region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  --max-label-value         maximum region label value to be used                                   [1]
+  -min                      minimum coverage                                                        [0]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps density}\label{gtools-overlaps_density}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps density
+
+USAGE:
+  gtools-overlaps density [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Computes the density (i.e. the coverage divided by the size of the reference region) of overlaps per reference region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  --max-label-value         maximum region label value to be used                                   [1]
+  -min                      minimum density                                                         [0.000000e+00]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps dist}\label{gtools-overlaps_dist}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps dist
+
+USAGE:
+  gtools-overlaps dist [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Computes the distance between a pair of intervals given breakpoints in reference file (e.g. restriction enzyme sites) [UNDER DEVELOPMENT].
+
+DETAILS:
+  * Test region file format: REG (because interchromosomal associations must be allowed)
+  * Reference region file format: REG, GFF, BED, SAM
+  * Operands: interval pair, region-set
+  * Test region requirements: none
+  * Reference region requirements: chromosome/strand-compatible, sorted and non-overlapping
+  * Test region-set requirements: none
+  * Reference region-set requirements: non-overlapping
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  --print-labels            print test region labels                                                [false]
+  --print-regions           print test regions                                                      [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps intersect}\label{gtools-overlaps_intersect}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps intersect
+
+USAGE:
+  gtools-overlaps intersect [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Computes the intersection between all pairs of test and reference regions. Results are grouped by test region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Test region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Reference region requirements: single-interval regions
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -label                    print query label for each match                                        [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps offset}\label{gtools-overlaps_offset}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps offset
+
+USAGE:
+  gtools-overlaps offset [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Computes the distances of test regions from their overlapping reference regions.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Test region requirements: single-interval
+  * Reference region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  --skip-ref-gaps           ignore gaps in reference regions when computing offsets                 [false]
+  -label                    print test region labels                                                [false]
+  -op                       reference point (1=start, 2=stop, 5p=5'-end, 3p=3'-end)                 [5p]
+  -a                        print distances as a fraction of total size                             [false]
+  -c                        print center of interval only                                           [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps overlap}\label{gtools-overlaps_overlap}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps overlap
+
+USAGE:
+  gtools-overlaps overlap [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Finds the overlaps between all pairs of test and reference regions. Results are grouped by test region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  -label                    print query label for each match                                        [false]
+  -t                        label separator                                                         [:]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps reduce}\label{gtools-overlaps_reduce}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps reduce
+
+USAGE:
+  gtools-overlaps reduce [OPTIONS] REGION-FILE
+
+DESCRIPTION:
+  Reduces number of input regions by removing regions covered by some higher-rank region.
+
+DETAILS:
+  * Region file format: REG, GFF, BED, SAM (but only REG allows interchromosomal associations)
+  * Reference region file format: REG, GFF, BED, SAM
+  * Operands: regions, region-set
+  * Region requirements: none
+  * Region-set requirements: none
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps rpkm}\label{gtools-overlaps_rpkm}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps rpkm
+
+USAGE:
+  gtools-overlaps rpkm [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Computing reference region RPKM values.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  --max-label-value         maximum region label value to be used                                   [1]
+  -min                      minimum RPKM                                                            [0.000000e+00]
+\end{lstlisting}
+%
+\subsubsection{gtools-overlaps subset}\label{gtools-overlaps_subset}
+\begin{lstlisting}
+code.repo/bin$ ./gtools-overlaps subset
+
+USAGE:
+  gtools-overlaps subset [OPTIONS] REFERENCE-REGION-FILE <TEST-REGION-FILE>
+
+DESCRIPTION:
+  Picks a subset of test regions depending on their overlap with reference regions. Results are grouped by test region.
+
+DETAILS:
+  * Input formats: REG, GFF, BED, SAM
+  * Operands: region, region-set
+  * Region requirements: chromosome/strand-compatible, sorted, non-overlapping
+  * Region-set requirements: sorted if -S option is used
+
+OPTIONS:
+  --help                    help                                                                    [false]
+  -h                        help                                                                    [false]
+  -v                        verbose mode                                                            [false]
+  -B                        number of shift-bits for each bin level                                 [17,20,23,26]
+  -S                        test and reference regions are sorted by chromosome and start position  [false]
+  -s                        test and reference regions are also sorted by strand (-S must be set)   [false]
+  -i                        ignore strand while finding overlaps                                    [false]
+  -gaps                     matching gaps between intervals are considered overlaps                 [false]
+  -inv                      print test regions that do *not* overlap with reference regions         [false]
+\end{lstlisting}
+%
+% \begin{lstlisting}
+% \end{lstlisting}
+% %
+% \begin{lstlisting}
+% \end{lstlisting}
+% 
+\clearpage

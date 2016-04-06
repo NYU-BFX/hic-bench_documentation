@@ -1,0 +1,30 @@
+\subsection[pipeline-master-explorer]{Other Pipeline Software: pipeline-master-explorer.r}\label{pipeline-master-explorer}%
+The \path{pipeline-master-explorer.r} script, located in the \path{code.main} directory, is the driver of combinatorial parameter exploration during the execution of each pipeline step. 
+\begin{lstlisting}
+code.main$ ./pipeline-master-explorer.r --help
+Usage: pipeline-master-explorer.r [OPTIONS] SCRIPT OUTDIR-PREFIX PARAM-SCRIPTS INPUT-BRANCHES SPLIT-VARIABLE OUTPUT-OBJECT-VARIABLE TUPLES
+
+
+Options:
+	-v, --verbose
+		Print more messages.
+
+	-S SAMPLE-SHEET, --sample-sheet=SAMPLE-SHEET
+		Sample sheet file name (required) [default "inputs/sample-sheet.tsv"].
+
+	-F FILTER-BRANCH, --filter-branch=FILTER-BRANCH
+		Regular expression for filtering input branches [default ""].
+
+	--exclude-branch=EXCLUDE-BRANCH
+		Regular expression for excluding input branches [default ""].
+
+	--exclude-obj=EXCLUDE-OBJ
+		Regular expression for excluding input objects [default ""].
+
+	--exclude-outdir=EXCLUDE-OUTDIR
+		Regular expression for excluding output directories [default ""].
+
+	-h, --help
+		Show this help message and exit
+\end{lstlisting}
+%

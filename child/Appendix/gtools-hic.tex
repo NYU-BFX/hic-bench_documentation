@@ -1,0 +1,176 @@
+\subsection[gtools-hic]{Other Pipeline Software: gtools-hic}\label{gtools-hic}%
+% \subsection{Error Logs}
+% Errors encountered during pipeline execution can be viewed with:
+% 
+\begin{lstlisting}
+code.repo/bin/gtools-hic$
+
+USAGE:
+  gtools-hic OPERATION [OPTIONS] <REGION-SET>
+
+VERSION:
+  genomic-tools 3.0.0
+
+DESCRIPTION:
+  Pipeline for HiC-seq data analysis. For detailed description and list of options choose an operation and use the --help option.
+
+OPERATION:
+  align           Iteratively aligns HiC-seq read pairs to reference genome using bowtie2.
+  classify        Classifies and computes various metrics for HiC-seq aligned read pairs.
+  filter          Filters HiC-seq aligned read pairs for common experimental artifacts.
+  bin             Bins filtered read pairs to genomic bins of desired resolution.
+  matrix          Create Hi-C count matrix.
+  convert         Convert contact matrix into WashU Epigenome Browser format.
+\end{lstlisting}
+%
+\subsubsection{gtools-hic align}\label{gtools-hic_align}
+\begin{lstlisting}
+code.repo/bin/gtools-hic align --help
+
+USAGE:
+  gtools-hic align [OPTIONS] READ1-FASTQ READ2-FASTQ
+
+DESCRIPTION:
+  Iteratively aligns HiC-seq read pairs to reference genome using bowtie2.
+
+DETAILS:
+  * Input: FASTQ files
+  * Output: aligned reads in SAM format (same order as in fastq files)
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  --work-dir                working directory (required)                                   []
+  --min-len                 minimum truncated read length                                  [30]
+  --len-diff                read truncation step                                           [10]
+  -p                        number of threads for bowtie2 run                              [1]
+  --bowtie-path             full bowtie2 path (version>=2.1.0)                             [bowtie2]
+  --bowtie-index            full bowtie2 index prefix path                                 [genome/bowtie2.index/genome]
+\end{lstlisting}
+%
+\subsubsection{gtools-hic classify}\label{gtools-hic_classify}
+\begin{lstlisting}
+code.repo/bin/gtools-hic classify --help$
+
+USAGE:
+  gtools-hic classify [OPTIONS] <ALIGNED-READS>
+
+DESCRIPTION:
+  Classifies and computes various metrics for HiC-seq aligned read pairs.
+
+DETAILS:
+  * Input: aligned reads in SAM format (sorted by read-id, at most one alignment per read)
+  * Output: tab-separated table
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  -E                        enzyme fragments (BED/GFF/SAM/REG)                             []
+  --mapq                    minimum mapping quality (MAPQ)                                 [3.000000e+01]
+  --min-dist                miminum allowed distance between 5's of reads in read pair     [500]
+  --max-offset              maximum allowed offset of 5's of reads from fragment ends      [500]
+
+\end{lstlisting}
+%
+\subsubsection{gtools-hic filter}\label{gtools-hic_filter}
+\begin{lstlisting}
+code.repo/bin/gtools-hic filter --help$
+
+USAGE:
+  gtools-hic filter [OPTIONS] <ALIGNED-READS>
+
+DESCRIPTION:
+  Filters HiC-seq aligned read pairs for common experimental artifacts.
+
+DETAILS:
+  * Input: aligned reads in SAM format (sorted by read-id, at most one alignment per read)
+  * Output: filtered read pairs in REG format
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  -E                        enzyme fragments (BED/GFF/SAM/REG)                             []
+  --mapq                    minimum mapping quality (MAPQ)                                 [3.000000e+01]
+  --min-dist                miminum allowed distance between 5's of reads in read pair     [500]
+  --max-offset              maximum allowed offset of 5's of reads from fragment ends      [500]
+  --filter-dups             filter duplicate read pairs as PCR artifacts                   [false]
+  --stats                   output statistics file (default=stderr)                        []
+\end{lstlisting}
+%
+\subsubsection{gtools-hic bin}\label{gtools-hic_bin}
+\begin{lstlisting}
+code.repo/bin/gtools-hic bin --help$
+
+USAGE:
+  gtools-hic bin [OPTIONS] <FILTERED-READ-PAIRS>
+
+DESCRIPTION:
+  Bins filtered read pairs to genomic bins of desired resolution.
+
+DETAILS:
+  * Input: filtered read pairs in REG format
+  * Output: binned read pairs
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  --bin-size                genomic bin size                                               [1000000]
+  -g                        genome region file (BED/REG)                                   []
+  --split-matrix            print output as matrix                                         [false]
+  --matrix                  print output as matrix (overrides --split-matrix)              [false]
+\end{lstlisting}
+%
+\subsubsection{gtools-hic matrix}\label{gtools-hic_matrix}
+\begin{lstlisting}
+code.repo/bin/gtools-hic matrix --help$
+
+USAGE:
+  gtools-hic matrix [OPTIONS] <FILTERED-READ-PAIRS>
+
+DESCRIPTION:
+  Create Hi-C count matrix.
+
+DETAILS:
+  * Input: filtered read pairs in REG format
+  * Output: contact matrix
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  --bin-size                genomic bin size (in nucleotides)                              [5000]
+  --max-dist                maximum distance between bins (in nucleotides; default = no restriction)[0]
+  --rotate45                rotate matrix by 45 degrees (applicable if --max-dist > 0)     [false]
+  -R                        reference region file (BED/REG)                                []
+  -p                        output file prefix                                             []
+\end{lstlisting}
+%
+\subsubsection{gtools-hic convert}\label{gtools-hic_convert}
+\begin{lstlisting}
+code.repo/bin/gtools-hic convert --help
+
+USAGE:
+  gtools-hic convert [OPTIONS] <CONTACT-MATRIX>
+
+DESCRIPTION:
+  Convert contact matrix into WashU Epigenome Browser format.
+
+DETAILS:
+  * Input: locus-labelled contact matrix
+  * Output: WashU Epigenome Browser format
+
+OPTIONS:
+  --help                    help                                                           [true]
+  -h                        help                                                           [true]
+  -v                        verbose mode                                                   [false]
+  --col-labels              input matrix has column labels                                 [false]
+  -t                        matrix element separator                                       [ ]
+  -c                        normalization constant                                         [1.000000e+00]
+  -min                      score cutoff (values below this are set to zero)               [0.000000e+00]
+  -d                        maximum distance between interacting loci (default = no limit) [0]
+\end{lstlisting}
+\clearpage

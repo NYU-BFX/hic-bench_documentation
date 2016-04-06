@@ -1,0 +1,9 @@
+.Rproj.user*
+*.Rproj
+.now.projectlog.tsv
+HiC-Bench_manual_backup.pdf
+*.aux
+*.lof
+*.log
+*.toc
+*concordance.tex

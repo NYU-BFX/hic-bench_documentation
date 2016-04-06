@@ -1,0 +1,69 @@
+\subsection{Domains}\label{HiC:domains}% __11a-domains
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Input} % inputs
+Data from the pipeline steps %\texttt{matrix-estimated}) (Section~\ref{HiC:matrix-estimated}), % this one removed
+\texttt{matrix-filtered} (Section~\ref{HiC:matrix-filtered}), \texttt{matrix-hicnorm} (Section~\ref{HiC:matrix-hicnorm}), \texttt{matrix-prep} (Section~\ref{HiC:matrix-prep}), and \texttt{matrix-ic} (Section~\ref{HiC:matrix-ic}) are used as input.
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Analysis} % analysis
+Default parameters:
+\begin{lstlisting}
+params.armatus.gamma_0.5.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set tool = armatus
+set chrom_excluded = 'chr[MY]'
+set armatus_params = "-g 0.5"
+\end{lstlisting}
+
+\begin{lstlisting}
+params.hicmatrix.tcsh$
+#!/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set tool = hicmatrix
+
+set chrom_excluded = 'chr[MY]'
+
+set hicmatrix_params = ( \
+--min-lambda=0.0 --max-lambda=1.0 --n-lambda=6 --gamma=0 \
+--preprocess=none \
+--method=ratio \
+--distance=`echo 500000/$bin_size | bc` \
+--distance2=`echo 500000/$bin_size | bc` \
+--skip-distance=0 \
+--flank-dist=`echo 500000/$bin_size | bc` \
+--tolerance=0.01 \
+--alpha=0.25 \
+--track-dist=`echo 2000000/$bin_size | bc` \
+--presentation=none \
+)
+\end{lstlisting}
+
+\begin{lstlisting}
+params.topdom.tcsh$
+#!/usr/bin/tcsh
+
+source ./inputs/params/params.tcsh
+
+set tool = topdom
+set topdompath = "./code/TopDom.R"
+set chrom_excluded = 'chr[MY]'
+set winsize = 5
+\end{lstlisting}
+%~~~~~~~~~~~~~~~~~~~%
+\subsubsection{Output} % outputs
+Default output: %results/domains.by_sample.armatus.gamma_0.5/matrix-filtered.by_sample.res_40kb/filter.by_sample.standard/align.by_sample.bowtie2/CD34-HindIII-rep1/
+\begin{lstlisting}
+-rw-r--r--  1 at570 288K Feb 15 16:31 domains.k=001.bed
+-rw-r--r--  1 at570  28K Feb 15 16:31 job.err
+-rw-r--r--  1 at570   47 Feb 15 16:13 job.id
+-rw-r--r--  1 at570 5.6K Feb 15 16:31 job.out
+-rw-r--r--  1 at570  347 Feb 15 16:13 job.sh
+-rw-r--r--  1 at570 2.7K Feb 15 16:31 job.vars.tsv
+\end{lstlisting}
+% 
+% \newpage
+\clearpage
