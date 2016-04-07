@@ -7,3 +7,4 @@ HiC-Bench_manual_backup.pdf
 *.log
 *.toc
 *concordance.tex
+.Rhistory
